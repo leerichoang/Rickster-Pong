@@ -216,7 +216,7 @@ class Pong:
             if self.game_over:
                 self.show_winner_screen()
                 self.game_over = False
-                pygame.mixer.music.play(True,True)
+                pygame.mixer.music.play(True, True)
 
                 self.score_ai = 0
                 self.score_player = 0
