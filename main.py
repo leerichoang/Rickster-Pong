@@ -20,11 +20,14 @@ class Pong:
 
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
-    # Sounds
 
+    game_over = False
+    # Sounds
 
     def __init__(self):
         pygame.init()
+
+        # Intializing Audio files into game.
         self.music = pygame.mixer.music.load('bgmusic.mp3')
         self.loseaudio = pygame.mixer.Sound('losescreen.wav')
         self.winaudio = pygame.mixer.Sound('winscreen.wav')
@@ -33,23 +36,28 @@ class Pong:
         self.backpaddleaudio = pygame.mixer.Sound('backboop.wav')
         self.sidepaddleaudio = pygame.mixer.Sound('sideboop.wav')
 
+        # Creating Screen
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         self.clock = pygame.time.Clock()
-        # Creating the Window
+
         # scores
         self.score_player = 0
         self.score_ai = 0
-        self.font = pygame.font.SysFont(None, 40)
-        self.text = self.font.render(str(self.score_player) + "/5       " + str(self.score_ai) + "/5", True, self.WHITE)
-        self.aiwin = self.font.render("Computer Wins", True, self.WHITE)
-        self.playerwin = self.font.render("You Wins", True, self.WHITE)
-        self.instruct = self.font.render("Press anykey to play agian, press esc to quit", True, self.WHITE)
+
         self.paddles = []
         self.sidepaddles = []
         self.balls = []
         self.aibackpaddle = []
         self.aisidepaddle = []
 
+        # Initialising text screens
+        self.font = pygame.font.SysFont(None, 40)
+        self.text = self.font.render(str(self.score_player) + "/5       " + str(self.score_ai) + "/5", True, self.WHITE)
+        self.aiwin = self.font.render("Computer Wins", True, self.WHITE)
+        self.playerwin = self.font.render("You Wins", True, self.WHITE)
+        self.instruct = self.font.render("Press anykey to play agian, press corner X to quit", True, self.WHITE)
+
+        # defining the Padddles
         self.sidepaddles.append(Sidepaddle(
             self.paddle_velocity,
             pygame.K_LEFT,
@@ -143,6 +151,7 @@ class Pong:
                 ball.y = self.HEIGHT / 2 - self.ball_radius / 2
                 ball.angle = random.randint(-5, 5)
 
+    # Check collision for player paddle and Ball
     def check_backpaddle(self):
         for ball in self.balls:
             for paddle in self.paddles:
@@ -153,6 +162,7 @@ class Pong:
                     ball.angle = random.randint(-5, 5)
                     break
 
+    # Check collision for side paddle and Ball
     def check_sidepaddle(self):
         for ball in self.balls:
             for paddle in self.sidepaddles:
@@ -163,6 +173,7 @@ class Pong:
 
                     break
 
+    # Check's collision on AI paddle and Ball
     def check_aibackpaddle(self):
         for ball in self.balls:
             for paddle in self.aibackpaddle:
@@ -173,6 +184,7 @@ class Pong:
                     ball.angle = random.randint(-5, 5)
                     break
 
+    # Checks a collision between AI side paddles and Ball
     def check_aisidepaddle(self):
         for ball in self.balls:
             for paddle in self.aisidepaddle:
@@ -181,6 +193,7 @@ class Pong:
                     ball.angle = -ball.angle
                     break
 
+    # Shows winning screen Ket check
     def show_winner_screen(self):
         waiting = True
         self.screen.fill(self.BLACK)
@@ -189,12 +202,12 @@ class Pong:
             for events in pygame.event.get():
                 if events.type == pygame.QUIT:
                     pygame.quit()
-                elif events.type == pygame.KEYDOWN and events.type != pygame.K_ESCAPE:
+                    sys.exit(0)
+                elif events.type == pygame.KEYUP and events.type != pygame.K_ESCAPE:
                     waiting = False
                     self.game_over = False
 
-    game_over = False
-
+    # Start the game
     def game_loop(self):
         # Loop to quite when Escape is pressed
         pygame.mixer.music.play(-1)

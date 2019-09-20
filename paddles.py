@@ -1,6 +1,6 @@
 import pygame
 
-
+# Init the back paddle of player
 class Backpaddle(pygame.Rect):
     def __init__(self, velocity, up_key, down_key, *args, **kwargs):
         self.velocity = velocity
@@ -8,6 +8,7 @@ class Backpaddle(pygame.Rect):
         self.down_key = down_key
         super().__init__(*args, **kwargs)
 
+# Function to move paddle and boundry check
     def move_paddle(self, board_height):
         keys_pressed = pygame.key.get_pressed()
 
@@ -19,7 +20,7 @@ class Backpaddle(pygame.Rect):
             if self.y + self.velocity < board_height - self.height:
                 self.y += self.velocity
 
-
+# Initialize the side paddle for the user with boundry checks
 class Sidepaddle(pygame.Rect):
     def __init__(self, velocity, left_key, right_key, *args, **kwargs):
         self.velocity = velocity
